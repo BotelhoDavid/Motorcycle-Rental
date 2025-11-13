@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/1.API/">
+    <Project Path="src/API/API.csproj" />
+  </Folder>
+  <Folder Name="/2.Application/">
+    <Project Path="src/Application/Application/Application.csproj" Id="66c065bb-5453-401f-a70b-6653e6262dce" />
+  </Folder>
+  <Folder Name="/3.Domain/">
+    <Project Path="src/Domain/Domain/Domain.csproj" Id="e2ecda11-0427-4e09-8164-541d78e5977f" />
+  </Folder>
+  <Folder Name="/4.Infra/">
+    <Project Path="src/Infra/Infra/Infra.csproj" Id="865d19c1-f514-46a0-88b7-aa3e13645124" />
+  </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+</Solution>

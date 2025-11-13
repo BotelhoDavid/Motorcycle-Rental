@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  agendamento.api:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    depends_on:
+        - kafka
+        - mongodb
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+        - MONGO_CONNECTION_STRING=mongodb://mongodb:27017
+    ports:
+        - 5000:80
+    networks:
+        - motorcyclerental-network
+    
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    environment:
+        - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+        - 2181:2181
+    networks:
+        - motorcyclerental-network
+
+  kafka:
+    image: bitnami/kafka:latest
+    environment:
+        - KAFKA_BROKER_ID=1
+        - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+        - KAFKA_LISTENERS=PLAINTEXT://:9092
+        - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+        - ALLOW_PLAINTEXT_LISTENER=yes
+        - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+    depends_on:
+        - zookeeper
+    ports:
+        - 9092:9092
+    networks:
+        - motorcyclerental-network
+
+  mongodb:
+    image: mongo:6.0
+    restart: always
+    ports:
+        - 27017:27017
+    volumes:
+        - mongo-data:/data/db
+    networks:
+        - motorcyclerental-network
+
+volumes:
+    mongo-data:
+    
+networks:
+  motorcyclerental-network:
