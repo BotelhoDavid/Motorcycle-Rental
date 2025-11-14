@@ -1,14 +1,14 @@
 ﻿using Domain.Interfaces.Repositories;
-using Infra.Context;
+using Infra.Data.Mongo.Context;
 using MongoDB.Driver;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 
-namespace Infra.Repositories
+namespace Infra.Data.Mongo.Repositories
 {
     public class Repository<TDocument> : IRepository<TDocument> where TDocument : class
     {
-        protected readonly IMongoDBContext _context;
+        protected readonly IMongoContext _context;
 
         protected IMongoCollection<TDocument> Collection
         {
@@ -18,7 +18,7 @@ namespace Infra.Repositories
             }
         }
 
-        public Repository(IMongoDBContext context)
+        public Repository(IMongoContext context)
         {
             _context = context;
         }

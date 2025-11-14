@@ -2,15 +2,15 @@
 using System;
 using System.Collections;
 
-namespace Infra.Context
+namespace Infra.Data.Mongo.Context
 {
-    public class MongoDBContext : IMongoDBContext
+    public class MongoContext : IMongoContext
     {
         private string _catalog = string.Empty;
 
         public IMongoDatabase DataBase { get; }
 
-        public MongoDBContext()
+        public MongoContext()
         {
             MongoClient cliente = new MongoClient(GetConnectionStringFromEnvironment());
             DataBase = cliente.GetDatabase(_catalog);

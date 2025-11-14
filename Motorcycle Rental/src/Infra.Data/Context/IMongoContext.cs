@@ -1,8 +1,8 @@
 ﻿using MongoDB.Driver;
 
-namespace Infra.Context
+namespace Infra.Data.Mongo.Context
 {
-    public interface IMongoDBContext
+    public interface IMongoContext
     {
         public IMongoDatabase DataBase { get; }
 
