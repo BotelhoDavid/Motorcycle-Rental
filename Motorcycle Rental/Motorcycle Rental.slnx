@@ -1,15 +1,19 @@
 <Solution>
-  <Folder Name="/1.API/">
+  <Folder Name="/01 -API/">
     <Project Path="src/API/API.csproj" />
   </Folder>
-  <Folder Name="/2.Application/">
+  <Folder Name="/02 - Application/">
     <Project Path="src/Application/Application/Application.csproj" Id="66c065bb-5453-401f-a70b-6653e6262dce" />
   </Folder>
-  <Folder Name="/3.Domain/">
+  <Folder Name="/03 - Domain/">
     <Project Path="src/Domain/Domain/Domain.csproj" Id="e2ecda11-0427-4e09-8164-541d78e5977f" />
   </Folder>
-  <Folder Name="/4.Infra/">
-    <Project Path="src/Infra/Infra/Infra.csproj" Id="865d19c1-f514-46a0-88b7-aa3e13645124" />
+  <Folder Name="/04 - Infrastructure/" />
+  <Folder Name="/04 - Infrastructure/04.1 - Data/">
+    <Project Path="src/Infra.Data/Infra.Data.csproj" />
+  </Folder>
+  <Folder Name="/04 - Infrastructure/04.2 - CrossCutting/">
+    <Project Path="src/Infra.CrossCutting.Kafka/Infra.CrossCutting.Kafka.csproj" Id="1b40900f-876a-4b77-b14b-77f7569301e1" />
   </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />

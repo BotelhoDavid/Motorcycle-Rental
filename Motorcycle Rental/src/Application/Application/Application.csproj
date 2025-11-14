@@ -8,7 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Domain\Domain.csproj" />
-    <ProjectReference Include="..\..\Infra\Infra\Infra.csproj" />
+    <ProjectReference Include="..\..\Infra.CrossCutting.Kafka\Infra.CrossCutting.Kafka.csproj" />
+    <ProjectReference Include="..\..\Infra.Data\Infra.Data.csproj" />
   </ItemGroup>
 
 </Project>
