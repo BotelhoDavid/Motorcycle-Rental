@@ -19,6 +19,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application\Application\Application.csproj" />
+    <ProjectReference Include="..\Infra.Data.Postgress\Infra.Data.Postgress.csproj" />
+    <ProjectReference Include="..\Infra.Data\Infra.Data.Mongo.csproj" />
   </ItemGroup>
 
 </Project>

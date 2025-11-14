@@ -10,7 +10,8 @@
   </Folder>
   <Folder Name="/04 - Infrastructure/" />
   <Folder Name="/04 - Infrastructure/04.1 - Data/">
-    <Project Path="src/Infra.Data/Infra.Data.csproj" />
+    <Project Path="src/Infra.Data.Postgress/Infra.Data.Postgress.csproj" Id="364b9304-7756-4cdf-b430-169206b7828e" />
+    <Project Path="src/Infra.Data/Infra.Data.Mongo.csproj" />
   </Folder>
   <Folder Name="/04 - Infrastructure/04.2 - CrossCutting/">
     <Project Path="src/Infra.CrossCutting.Kafka/Infra.CrossCutting.Kafka.csproj" Id="1b40900f-876a-4b77-b14b-77f7569301e1" />

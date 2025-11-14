@@ -1,4 +1,6 @@
-using Infra.Context;
+
+using Infra.Data.Mongo.Context;
+using Infra.Data.Postgress.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<IMongoDBContext, MongoDBContext>();
+
+// PostgreSQL
+builder.Services.AddDbContext<AppDbContext>();
+
+// MongoDB
+builder.Services.AddSingleton<IMongoContext,MongoContext>();
 
 builder.Services.Scan(scan => scan
     .FromApplicationDependencies()

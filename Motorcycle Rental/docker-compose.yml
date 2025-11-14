@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  agendamento.api:
+  api:
     build:
         context: .
         dockerfile: Dockerfile
@@ -24,7 +24,7 @@ services:
     ports:
         - 2181:2181
     networks:
-        - motorcyclerental-network
+        - motorental-network
 
   kafka:
     image: bitnami/kafka:latest
@@ -40,7 +40,7 @@ services:
     ports:
         - 9092:9092
     networks:
-        - motorcyclerental-network
+        - motorental-network
 
   mongodb:
     image: mongo:6.0
@@ -50,10 +50,40 @@ services:
     volumes:
         - mongo-data:/data/db
     networks:
-        - motorcyclerental-network
+        - motorental-network
+
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_DATABASE_USER}
+      POSTGRES_PASSWORD: ${DB_DATABASE_USER_PASSWORD}
+      POSTGRES_DB: ${DB_CATALOG}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - motorental-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_web
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - motorental-network
 
 volumes:
     mongo-data:
+    postgres_data:
     
 networks:
-  motorcyclerental-network:
+  motorental-network:
