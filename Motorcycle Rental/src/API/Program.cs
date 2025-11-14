@@ -1,8 +1,19 @@
+using Infra.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddSingleton<IMongoDBContext, MongoDBContext>();
+
+builder.Services.Scan(scan => scan
+    .FromApplicationDependencies()
+    .AddClasses()
+    .AsMatchingInterface()
+    .WithScopedLifetime());
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
