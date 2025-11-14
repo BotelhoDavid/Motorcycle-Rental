@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities
 {
-    public class Motorcycle
+    public class Moto
     {
         public Guid Identificador { get; set; }
         public int Year { get; set; }
