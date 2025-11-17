@@ -55,13 +55,17 @@ namespace Motorcycle_Rental.Controllers
                 return NotFound(new MessageViewModel("Moto not found"));
         }
 
-
         [HttpPut("{id}/placa")]
         [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] UpdateMotoViewModel moto)
+        public async Task<IActionResult> UpdateAsync(string id, [FromBody] UpdateMotoViewModel moto)
         {
-            MessageViewModel message = await _service.UpdateAsync(id, moto);
+            if (!Guid.TryParse(id, out Guid guid))
+            {
+                return BadRequest(new MessageViewModel("Malformed request"));
+            }
+
+            MessageViewModel message = await _service.UpdateAsync(guid, moto);
 
             if (message.Success)
                 return Ok(message);
@@ -72,9 +76,14 @@ namespace Motorcycle_Rental.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(string id)
         {
-            var message = await _service.DeleteAsync(id);
+            if (!Guid.TryParse(id, out Guid guid))
+            {
+                return BadRequest(new MessageViewModel("Invalid data"));
+            }
+
+            var message = await _service.DeleteAsync(guid);
 
             if (message.Success)
                 return Ok(message);

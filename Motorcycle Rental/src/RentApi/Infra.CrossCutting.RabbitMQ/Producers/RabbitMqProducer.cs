@@ -16,12 +16,11 @@ namespace Rent.Infra.CrossCutting.RabbitMQ.Producers
 
         public async Task PublishAsync<T>(T message, string? routingKey = null)
         {
-            routingKey ??= _context.QueueName; // routingKey padrão
+            routingKey ??= _context.QueueName;
 
             using var connection = await _context.CreateConnectionAsync();
             using var channel = await connection.CreateChannelAsync();
 
-            // Garantir que exchange/queue existam
             await channel.ExchangeDeclareAsync(
                 exchange: _context.ExchangeName,
                 type: "direct",
@@ -42,17 +41,14 @@ namespace Rent.Infra.CrossCutting.RabbitMQ.Producers
                 routingKey: routingKey
             );
 
-            // Serializar objeto → JSON
             var json = JsonSerializer.Serialize(message);
             var body = Encoding.UTF8.GetBytes(json);
 
-            // Propriedades persistentes
             var props = new BasicProperties
             {
                 DeliveryMode = DeliveryModes.Persistent
             };
 
-            // Publicar mensagem
             await channel.BasicPublishAsync(
                 exchange: _context.ExchangeName,
                 routingKey: routingKey,

@@ -27,9 +27,9 @@ namespace Rent.Application.Services
         public async Task<MessageViewModel> CreateAsync(CreateMotoViewModel newMoto)
         {
             MessageViewModel message = new MessageViewModel();
+            newMoto.Normalize();
             Moto moto = _mapper.Map<Moto>(newMoto);
 
-            // Criação no banco
             await _repositoryMoto.CreateAsync(moto);
             bool successfully = await _repositoryMoto.CommitAsync();
 
@@ -42,19 +42,10 @@ namespace Rent.Application.Services
 
             message.SetSuccess(true);
 
-            // ----------- Publicar no RabbitMQ --------------------
-            try
-            {
-                await _rabbitMqProducer.PublishAsync(_mapper.Map<MotoCreatedEvent>(moto), "motos.created");
+            _rabbitMqProducer.PublishAsync(_mapper.Map<MotoCreatedEvent>(moto), "motos.created");
 
-                if (moto.Year == 2024)
-                    await _rabbitMqProducer.PublishAsync(_mapper.Map<MotoSpecialNotificationEvent>(moto), "motos.notification");
-            }
-            catch (Exception ex)
-            {
-                // Não falha a criação, apenas loga/retorna aviso
-                message.SetMessage($"Moto criada, mas ocorreu um erro ao publicar no RabbitMQ: {ex.Message}");
-            }
+            if (moto.Year == 2024)
+                _rabbitMqProducer.PublishAsync(_mapper.Map<MotoSpecialNotificationEvent>(moto), "motos.notification");
 
             return message;
         }
@@ -101,10 +92,9 @@ namespace Rent.Application.Services
 
         public async Task<MessageViewModel> UpdateAsync(Guid id, UpdateMotoViewModel moto)
         {
+            MessageViewModel message = new MessageViewModel();
             try
             {
-                MessageViewModel message = new MessageViewModel();
-
                 Moto motoOld = await _repositoryMoto.GetAsync(id) ?? throw new Exception();
 
                 motoOld.UpdatePlate(moto.Plate);
@@ -118,18 +108,12 @@ namespace Rent.Application.Services
 
                 message.SetSuccess(succesfully);
                 message.SetMessage("Plate modified successfully");
-
-                return message;
             }
             catch (Exception)
             {
-                MessageViewModel message = new MessageViewModel();
-
                 message.SetMessage("Invalid data");
-                message.SetSuccess(false);
-
-                return message;
             }
+            return message;
         }
     }
 }

@@ -17,21 +17,33 @@ namespace Rent.Application.Services
             _repositoryDriver = repositoryDriver;
             _mapper = mapper;
         }
+
         public async Task<MessageViewModel> CreateAsync(CreateDriverViewModel newDriver)
         {
             MessageViewModel message = new MessageViewModel();
-            Driver driver = _mapper.Map<Driver>(newDriver);
+            try
+            {
+                newDriver.Normalize();
+                if (!newDriver.IsCNHValid())
+                    throw new Exception();
 
-            await _repositoryDriver.CreateAsync(driver);
+                Driver driver = _mapper.Map<Driver>(newDriver);
 
-            bool succesfully = await _repositoryDriver.CommitAsync();
+                await _repositoryDriver.CreateAsync(driver);
 
-            if (!succesfully)
+                bool succesfully = await _repositoryDriver.CommitAsync();
+
+                if (!succesfully)
+                    throw new Exception();
+
+                message.SetSuccess(succesfully);
+
+                
+            }
+            catch (Exception)
             {
                 message.SetMessage("Invalid data");
             }
-
-            message.SetSuccess(succesfully);
 
             return message;
         }

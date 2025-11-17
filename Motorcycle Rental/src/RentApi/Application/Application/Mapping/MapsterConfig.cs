@@ -2,6 +2,7 @@
 using Rent.Application.Events;
 using Rent.Application.ViewModels;
 using Rent.Domain.Entities;
+using EntityRent = Rent.Domain.Entities.Rent;
 
 namespace Rent.Application.Mapping
 {
@@ -19,7 +20,8 @@ namespace Rent.Application.Mapping
 
             config.NewConfig<CreateMotoViewModel, Moto>();
 
-            config.NewConfig<MotoSpecialNotificationEvent, Log>();
+            config.NewConfig<EntityRent, RentalViewModel>();
+            config.NewConfig<CreateRentalViewModel, EntityRent>();
 
 
         }

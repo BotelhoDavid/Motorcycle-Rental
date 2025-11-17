@@ -9,11 +9,15 @@ namespace Rent.Domain.Entities
         public DateTime Initio_date { get; set; }
         public DateTime End_date { get; set; }
         public DateTime Forecast_end_date { get; set; }
-        public DateTime Devolution_date { get; set; }
-        public int plan { get; set; }
-        public decimal Daily_value { get; set; }
+        public DateTime Return_date { get; set; }
+        public int Plan { get; set; }
 
         public virtual Moto Moto { get; set; }
         public virtual Driver Driver { get; set; }
+
+        public void SetReturnDate(DateTime return_date)
+        {
+            Return_date = return_date;
+        }
     }
 }

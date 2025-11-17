@@ -9,5 +9,11 @@ namespace Rent.Application.ViewModels
         public int Year { get; set; }
         public string Model { get; set; }
         public string Plate { get; set; }
+
+        public void Normalize()
+        {
+            Model = Model?.ToUpper();
+            Plate = Plate?.Trim().ToUpper();
+        }
     }
 }

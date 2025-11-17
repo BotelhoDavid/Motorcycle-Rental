@@ -1,7 +1,7 @@
 ﻿namespace Rent.Application.ViewModels
 {
-    public class RentalDevolutionViewModel
+    public class RentalReturnViewModel
     {
-        public DateTime Devolution_date { get; set; }
+        public DateTime Return_date { get; set; }
     }
 }

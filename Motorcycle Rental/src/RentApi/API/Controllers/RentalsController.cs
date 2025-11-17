@@ -8,44 +8,60 @@ namespace Motorcycle_Rental.Controllers
     [ApiController]
     public class RentalsController : ControllerBase
     {
-        private readonly IRentAppService _rentAppService;
+        private readonly IRentAppService _service;
 
-        public RentalsController(IRentAppService rentAppService)
+        public RentalsController(IRentAppService service)
         {
-            _rentAppService = rentAppService;
+            _service = service;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRental([FromBody] CreateRentalViewModel model)
+        [ProducesResponseType(statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateAsync([FromBody] CreateRentalViewModel rental)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            MessageViewModel message = await _service.CreateAsync(rental);
 
-            await _rentAppService.CreateAsync(model);
-
-            return Ok();
+            if (message.Success)
+                return Created();
+            else
+                return BadRequest(new MessageViewModel("Invalid data"));
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(statusCode: StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById(string id)
         {
-            var rental = await _rentAppService.GetAsync(id);
-            if (rental == null)
-                return NotFound();
+            if (!Guid.TryParse(id, out Guid guid))
+            {
+                return BadRequest(new MessageViewModel("Malformed request"));
+            }
 
-            return Ok(rental);
+            RentalViewModel rent = await _service.GetAsync(guid);
+
+            if (rent.Success)
+                return Ok(rent);
+            else
+                return NotFound(new MessageViewModel("Moto not found"));
         }
 
-        [HttpPut("{id}/devolution")]
-        public async Task<IActionResult> SetDevolution(Guid id, [FromBody] RentalDevolutionViewModel model)
+        [HttpPut("{id}/Return")]
+        [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateAsync(string id, [FromBody] RentalReturnViewModel model)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (!Guid.TryParse(id, out Guid guid))
+            {
+                return BadRequest(new MessageViewModel("Invalid data"));
+            }
+            MessageViewModel message = await _service.SetReturnAsync(guid, model);
 
-            await _rentAppService.SetDevolutionAsync(id, model);
-
-            return Ok();
+            if (message.Success)
+                return Ok(message);
+            else
+                return BadRequest(message);
         }
     }
-}
 }

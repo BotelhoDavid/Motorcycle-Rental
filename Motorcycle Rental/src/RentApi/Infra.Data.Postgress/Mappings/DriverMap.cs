@@ -9,21 +9,22 @@ namespace Rent.Infra.Data.Postgress.Mappings
         public void Configure(EntityTypeBuilder<Driver> builder)
         {
             builder.ToTable("Drivers");
-            builder.HasKey(p => p.Id);            
-            builder.Property(p => p.Name).HasMaxLength(50);
-            builder.Property(p => p.CNPJ).HasMaxLength(25);
-            builder.Property(p => p.CNHNumber).HasMaxLength(15);
-            builder.Property(p => p.CNHtype).HasMaxLength(3);
+            builder.HasKey(driver => driver.Id);
 
-            builder.HasMany(m => m.Rents)
-               .WithOne(r => r.Driver)
-               .HasForeignKey(r => r.Driver_id)
+            builder.Property(driver => driver.Name).HasMaxLength(50);
+            builder.Property(driver => driver.CNPJ).HasMaxLength(25);
+            builder.Property(driver => driver.CNHNumber).HasMaxLength(15);
+            builder.Property(driver => driver.CNHtype).HasMaxLength(3);
+
+            builder.HasMany(driver => driver.Rents)
+               .WithOne(rent => rent.Driver)
+               .HasForeignKey(driver => driver.Driver_id)
                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasIndex(p => p.CNPJ)
+            builder.HasIndex(driver => driver.CNPJ)
                    .IsUnique();
 
-            builder.HasIndex(p => p.CNHNumber)
+            builder.HasIndex(driver => driver.CNHNumber)
                    .IsUnique();
         }
     }

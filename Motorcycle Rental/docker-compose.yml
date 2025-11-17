@@ -1,11 +1,10 @@
 ﻿version: '3.8'
 
 services:
-  # Serviço da API (Consumidor/Produtor)
   rent:
     build:
-      context: . # <--- CORRIGIDO: O contexto deve ser a raiz do projeto.
-      dockerfile: src/RentApi/API/Dockerfile # <--- Caminho ajustado para onde o Dockerfile deve estar.
+      context: .
+      dockerfile: src/RentApi/API/Dockerfile
     container_name: rent
     restart: always
     depends_on:

@@ -9,16 +9,17 @@ namespace Rent.Infra.Data.Postgress.Mappings
         public void Configure(EntityTypeBuilder<Moto> builder)
         {
             builder.ToTable("Motos");
-            builder.HasKey(p => p.Id);
-            builder.Property(p => p.Plate).IsRequired().HasMaxLength(10);
+            builder.HasKey(moto => moto.Id);
+
+            builder.Property(moto => moto.Plate).IsRequired().HasMaxLength(10);
             builder.Property(p => p.Model).IsRequired().HasMaxLength(25);
 
-            builder.HasMany(m => m.Rents)
-               .WithOne(r => r.Moto)
-               .HasForeignKey(r => r.Moto_id)
+            builder.HasMany(moto => moto.Rents)
+               .WithOne(rent => rent.Moto)
+               .HasForeignKey(moto => moto.Moto_id)
                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasIndex(p => p.Plate)
+            builder.HasIndex(moto => moto.Plate)
                    .IsUnique();
         }
     }
