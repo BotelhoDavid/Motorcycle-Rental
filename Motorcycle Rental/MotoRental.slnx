@@ -17,6 +17,9 @@
     <Project Path="src/RentApi/Infra.CrossCutting.IoC/Rent.Infra.CrossCutting.IoC.csproj" />
     <Project Path="src/RentApi/Infra.CrossCutting.RabbitMQ/Rent.Infra.CrossCutting.RabbitMQ.csproj" />
   </Folder>
+  <Folder Name="/02 - LogApi/">
+    <Project Path="src/LogAPI/LogAPI.csproj" Id="0f56a03c-5690-410a-a379-84ff58477635" />
+  </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>

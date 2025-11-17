@@ -16,7 +16,8 @@ namespace Rent.Application.Mapping
             config.NewConfig<Moto, MotoReturnViewModel>();
 
             config.NewConfig<Moto, MotoCreatedEvent>();
-            config.NewConfig<Moto, MotoSpecialNotificationEvent>();
+            config.NewConfig<Moto, MotoSpecialNotificationEvent>()
+                .Map(notification => notification.Moto_id, moto => moto.Id);
 
             config.NewConfig<CreateMotoViewModel, Moto>();
 

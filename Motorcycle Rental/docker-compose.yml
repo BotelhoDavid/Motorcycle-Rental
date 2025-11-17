@@ -13,11 +13,11 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       # RabbitMQ
-      RABBITMQ_HOST: "rabbitmq"
-      RABBITMQ_DEFAULT_USER: "guest"
-      RABBITMQ_PASS: "guest"
-      RABBITMQ_QUEUE: "motos.notification"
-      RABBITMQ_EXCHANGE: "motos.exchange"
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_PASS: guest
+      RABBITMQ_QUEUE: motos.queue
+      RABBITMQ_EXCHANGE: motos.exchange
       # Postgres
       DB_DATA_SOURCE: postgres
       DB_DATABASE_USER: postgres
@@ -26,6 +26,36 @@ services:
       DB_DATABASE_TIMEOUT_SEGUNDOS: 30
     ports:
       - "13000:8080"
+    networks:
+      - motorental-network
+
+  log:
+    build:
+      context: .
+      dockerfile: src/LogApi/Dockerfile
+    container_name: log
+    restart: always
+    depends_on:
+      - rabbitmq
+      - mongo
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+
+      # RabbitMQ
+      RABBITMQ_ROUTING_KEY: motos.notification
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_PASS: guest
+      RABBITMQ_QUEUE: motos.queue
+      RABBITMQ_EXCHANGE: motos.exchange
+
+      # MongoDB - CORRIGIDO (localhost → mongo_db1)
+      MONGO_CONNECTIONSTRING: mongodb://root:root123@mongo:27017/?authSource=admin
+
+      MONGO_COLLECTION: Logs
+      MONGO_DATABASE: Moto_Rental_Logs
+    ports:
+      - "13001:8080"
     networks:
       - motorental-network
 
@@ -51,10 +81,10 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: Moto_Rental      
+      POSTGRES_DB: Moto_Rental
     volumes:
-      - postgres_data:/var/lib/postgresql
-      - ./scripts:/docker-entrypoint-initdb.d  
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
     networks:
@@ -77,10 +107,45 @@ services:
     networks:
       - motorental-network
 
+  mongo:
+    image: mongo
+    container_name: mongo.db1
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: Moto_Rental_Logs      
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root123
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    networks: 
+      - motorental-network
+
+  mongo-express:
+    image: mongo-express:1.0.2-20-alpine3.19
+    platform: linux/amd64
+    container_name: mongo_express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root123
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: root123
+    depends_on:
+      - mongo
+    networks:
+      - motorental-network
+
 volumes:
   postgres_data:
   pgadmin_data:
   rabbitmq_data:
+  mongo_data:
 
 networks:
   motorental-network:

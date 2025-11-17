@@ -14,7 +14,7 @@ namespace Rent.Infra.CrossCutting.RabbitMQ.Producers
 
             var factory = new ConnectionFactory
             {
-                HostName = vars["RABBITMQ_HOST"]?.ToString() ?? string.Empty,
+                HostName = vars["RABBITMQ_HOST"]?.ToString() ?? "rabbitmq",
                 Port = int.Parse(vars["RABBITMQ_PORT"]?.ToString() ?? "5672"),
                 UserName = vars["RABBITMQ_DEFAULT_USER"]?.ToString() ?? "guest",
                 Password = vars["RABBITMQ_DEFAULT_PASS"]?.ToString() ?? "guest",

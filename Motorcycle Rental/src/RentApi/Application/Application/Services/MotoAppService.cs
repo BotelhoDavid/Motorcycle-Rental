@@ -45,7 +45,10 @@ namespace Rent.Application.Services
             _rabbitMqProducer.PublishAsync(_mapper.Map<MotoCreatedEvent>(moto), "motos.created");
 
             if (moto.Year == 2024)
-                _rabbitMqProducer.PublishAsync(_mapper.Map<MotoSpecialNotificationEvent>(moto), "motos.notification");
+            {
+                var teste = _mapper.Map<MotoSpecialNotificationEvent>(moto);
+                _rabbitMqProducer.PublishAsync(teste, "motos.notification");
+            }
 
             return message;
         }

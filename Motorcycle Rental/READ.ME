@@ -1,37 +1,89 @@
-# 🚀 Projeto Moto Rental (API & Microserviços)
+# 🚀 Projeto Moto Rental (Microsserviços)
 
-Este projeto utiliza **Docker Compose** para orquestrar uma arquitetura baseada em microsserviços, incluindo:
+Este projeto utiliza **Docker Compose** para orquestrar uma arquitetura
+de microsserviços robusta, incluindo:
 
-- Uma **API .NET 10**
-- Um **Message Broker (RabbitMQ)**
-- Um **banco relacional PostgreSQL**
-- Interface de administração do banco (**PgAdmin4**)
-
----
+-   Duas APIs **.NET 10** (Rent e Log)\
+-   **RabbitMQ** como mensageria\
+-   **PostgreSQL** como banco relacional\
+-   **MongoDB** como banco NoSQL para o serviço de Logs\
+-   Interfaces gráficas **PgAdmin 4** e **Mongo Express**
 
 ## 💻 Tecnologias Envolvidas
 
-| Categoria         | Tecnologia              | Uso                                                                 |
-|------------------|--------------------------|---------------------------------------------------------------------|
-| Backend          | .NET 10 (ASP.NET Core)  | API principal e serviço Worker para consumo de mensagens            |
-| Mensageria       | RabbitMQ 3-Management   | Comunicação assíncrona entre microserviços                         |
-| Banco de Dados   | PostgreSQL              | Banco relacional da aplicação                                      |
-| Administração DB | PgAdmin 4               | Interface Web para gerenciar o PostgreSQL                          |
-| Infraestrutura   | Docker / Docker Compose | Orquestração dos containers                                        |
+  --------------------------------------------------------------------------
+  Categoria        Tecnologia     Uso
+  ---------------- -------------- ------------------------------------------
+  Backend          .NET 10        APIs principais (Rent) e serviço de log
+                   (ASP.NET Core) (Log).
 
-> **Observação:** Há um volume `mongo_data` configurado, indicando possível uso futuro de um banco NoSQL (ex: MongoDB) para logs, embora o serviço não esteja definido no `docker-compose.yml`.
+  Mensageria       RabbitMQ       Message Broker para comunicação assíncrona
+                   3-Management   entre serviços.
 
----
+  Banco de Dados 1 PostgreSQL     Banco relacional persistente da API Rent.
+
+  Banco de Dados 2 MongoDB        Banco NoSQL para persistência de logs.
+
+  Administração DB PgAdmin 4      Interface Web para gerenciar o PostgreSQL.
+  1                               
+
+  Administração DB Mongo Express  Interface Web para gerenciar o MongoDB.
+  2                               
+
+  Infraestrutura   Docker /       Containerização e orquestração de todos os
+                   Docker Compose serviços.
+  --------------------------------------------------------------------------
 
 ## ⚙️ Como Rodar a Aplicação
 
-Certifique-se de ter **Docker** e **Docker Compose** instalados.
+Certifique-se de ter **Docker** e **Docker Compose** instalados e em
+execução.
 
-### **1️⃣ Construir e iniciar os containers**
+### Construir e iniciar os containers
 
-Na pasta onde está o `docker-compose.yml`, execute:
-
-```bash
+``` bash
 docker compose up --build -d
+```
 
-PS: Tive algunms problemas na criação do consumer e por consequencia no salvamente na Notificação, faltou a parte de salvar arquivos.
+## 🔗 Endereços e Credenciais de Acesso
+
+### 1. APIs (.NET)
+
+  --------------------------------------------------------------------------------------
+  Serviço      Porta   URL de Acesso                 Ponto Sugerido
+  ------------ ------- ----------------------------- -----------------------------------
+  Rent API     13000   http://localhost:13000/       http://localhost:13000/index.html
+  --------------------------------------------------------------------------------------
+
+### 2. RabbitMQ Management
+
+-   **URL:** http://localhost:15672/
+-   **Usuário:** guest
+-   **Senha:** guest
+
+### 3. PgAdmin 4
+
+-   **URL:** http://localhost:5050/
+-   **E-mail:** admin@admin.com
+-   **Senha:** admin123
+-   **Senha PostgreSQL:** postgres
+
+### 4. Mongo Express
+
+-   **URL:** http://localhost:8081/
+-   **Usuário:** root
+-   **Senha:** root123
+
+## 🛑 Para Parar a Aplicação
+
+``` bash
+docker compose down
+```
+
+### Remover volumes (apaga dados):
+
+``` bash
+docker compose down -v
+```
+
+PS: Faltou o upload de arquivo.
