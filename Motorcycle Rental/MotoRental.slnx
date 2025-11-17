@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/01 - RentApi/" />
+  <Folder Name="/01 - RentApi/01 - API/">
+    <Project Path="src/RentApi/API/Rent.API.csproj" />
+  </Folder>
+  <Folder Name="/01 - RentApi/02 - Application/">
+    <Project Path="src/RentApi/Application/Application/Rent.Application.csproj" />
+  </Folder>
+  <Folder Name="/01 - RentApi/03 -Domain/">
+    <Project Path="src/RentApi/Domain/Domain/Rent.Domain.csproj" />
+  </Folder>
+  <Folder Name="/01 - RentApi/04 - Infra/" />
+  <Folder Name="/01 - RentApi/04 - Infra/4.1 - Data/">
+    <Project Path="src/RentApi/Infra.Data.Postgress/Rent.Infra.Data.Postgress.csproj" />
+  </Folder>
+  <Folder Name="/01 - RentApi/04 - Infra/4.2 - CrossCutting/">
+    <Project Path="src/RentApi/Infra.CrossCutting.IoC/Rent.Infra.CrossCutting.IoC.csproj" />
+    <Project Path="src/RentApi/Infra.CrossCutting.RabbitMQ/Rent.Infra.CrossCutting.RabbitMQ.csproj" />
+  </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+</Solution>

@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Postgres - Moto_Rental",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "Moto_Rental",
+      "Username": "postgres",
+      "SSLMode": "prefer",
+      "ConnectTimeout": 30
+    }
+  }
+}

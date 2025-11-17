@@ -1,69 +1,63 @@
-version: '3.8'
+﻿version: '3.8'
 
 services:
-  api:
+  # Serviço da API (Consumidor/Produtor)
+  rent:
     build:
-        context: .
-        dockerfile: Dockerfile
+      context: . # <--- CORRIGIDO: O contexto deve ser a raiz do projeto.
+      dockerfile: src/RentApi/API/Dockerfile # <--- Caminho ajustado para onde o Dockerfile deve estar.
+    container_name: rent
+    restart: always
     depends_on:
-        - kafka
-        - mongodb
+      - rabbitmq
+      - postgres
     environment:
-        - ASPNETCORE_ENVIRONMENT=Development
-        - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-        - MONGO_CONNECTION_STRING=mongodb://mongodb:27017
+      ASPNETCORE_ENVIRONMENT: Development
+      # RabbitMQ
+      RABBITMQ_HOST: "rabbitmq"
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_PASS: "guest"
+      RABBITMQ_QUEUE: "motos.notification"
+      RABBITMQ_EXCHANGE: "motos.exchange"
+      # Postgres
+      DB_DATA_SOURCE: postgres
+      DB_DATABASE_USER: postgres
+      DB_DATABASE_USER_PASSWORD: postgres
+      DB_CATALOG: Moto_Rental
+      DB_DATABASE_TIMEOUT_SEGUNDOS: 30
     ports:
-        - 5000:80
+      - "13000:8080"
     networks:
-        - motorcyclerental-network
-    
-  zookeeper:
-    image: bitnami/zookeeper:latest
-    environment:
-        - ALLOW_ANONYMOUS_LOGIN=yes
-    ports:
-        - 2181:2181
-    networks:
-        - motorental-network
+      - motorental-network
 
-  kafka:
-    image: bitnami/kafka:latest
-    environment:
-        - KAFKA_BROKER_ID=1
-        - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-        - KAFKA_LISTENERS=PLAINTEXT://:9092
-        - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
-        - ALLOW_PLAINTEXT_LISTENER=yes
-        - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
-    depends_on:
-        - zookeeper
-    ports:
-        - 9092:9092
-    networks:
-        - motorental-network
-
-  mongodb:
-    image: mongo:6.0
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_server
     restart: always
     ports:
-        - 27017:27017
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
     volumes:
-        - mongo-data:/data/db
+      - rabbitmq_data:/var/lib/rabbitmq
     networks:
-        - motorental-network
+      - motorental-network  
 
   postgres:
-    image: postgres:16
+    image: postgres:latest
     container_name: postgres_db
     restart: always
     environment:
-      POSTGRES_USER: ${DB_DATABASE_USER}
-      POSTGRES_PASSWORD: ${DB_DATABASE_USER_PASSWORD}
-      POSTGRES_DB: ${DB_CATALOG}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: Moto_Rental      
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./scripts:/docker-entrypoint-initdb.d  
     ports:
       - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
     networks:
       - motorental-network
 
@@ -73,17 +67,22 @@ services:
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_PASSWORD: admin123
     ports:
       - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
     depends_on:
       - postgres
     networks:
       - motorental-network
 
 volumes:
-    mongo-data:
-    postgres_data:
-    
+  postgres_data:
+  pgadmin_data:
+  rabbitmq_data:
+
 networks:
   motorental-network:
+    driver: bridge

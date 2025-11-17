@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Dispatchers\**" />
+    <EmbeddedResource Remove="Dispatchers\**" />
+    <None Remove="Dispatchers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Producers\Context.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="7.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Application\Rent.Application.csproj" />
+    <ProjectReference Include="..\Domain\Domain\Rent.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,35 @@
+# 🚀 Projeto Moto Rental (API & Microserviços)
+
+Este projeto utiliza **Docker Compose** para orquestrar uma arquitetura baseada em microsserviços, incluindo:
+
+- Uma **API .NET 10**
+- Um **Message Broker (RabbitMQ)**
+- Um **banco relacional PostgreSQL**
+- Interface de administração do banco (**PgAdmin4**)
+
+---
+
+## 💻 Tecnologias Envolvidas
+
+| Categoria         | Tecnologia              | Uso                                                                 |
+|------------------|--------------------------|---------------------------------------------------------------------|
+| Backend          | .NET 10 (ASP.NET Core)  | API principal e serviço Worker para consumo de mensagens            |
+| Mensageria       | RabbitMQ 3-Management   | Comunicação assíncrona entre microserviços                         |
+| Banco de Dados   | PostgreSQL              | Banco relacional da aplicação                                      |
+| Administração DB | PgAdmin 4               | Interface Web para gerenciar o PostgreSQL                          |
+| Infraestrutura   | Docker / Docker Compose | Orquestração dos containers                                        |
+
+> **Observação:** Há um volume `mongo_data` configurado, indicando possível uso futuro de um banco NoSQL (ex: MongoDB) para logs, embora o serviço não esteja definido no `docker-compose.yml`.
+
+---
+
+## ⚙️ Como Rodar a Aplicação
+
+Certifique-se de ter **Docker** e **Docker Compose** instalados.
+
+### **1️⃣ Construir e iniciar os containers**
+
+Na pasta onde está o `docker-compose.yml`, execute:
+
+```bash
+docker compose up --build -d
